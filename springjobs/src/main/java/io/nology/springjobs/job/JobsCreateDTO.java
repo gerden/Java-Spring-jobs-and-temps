@@ -1,9 +1,14 @@
 package io.nology.springjobs.job;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
+
+import org.springframework.lang.Nullable;
+
 import io.nology.springjobs.temp.*;
 
 public class JobsCreateDTO {
@@ -11,16 +16,23 @@ public class JobsCreateDTO {
 	String name;
 
 //	@NotBlank
-	String StartDate;
+	LocalDateTime StartDate;
 
-	String EndDate;
+	LocalDateTime EndDate;
+	
+	@Nullable
+	Long temp;
 
 	
 	public JobsCreateDTO(@NotBlank String name, @NotBlank String startDate, String endDate) {
 		super();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
 		this.name = name;
-		StartDate = startDate;
-		EndDate = endDate;
+		StartDate = LocalDateTime.parse(startDate, formatter);
+		EndDate = LocalDateTime.parse(endDate, formatter);
+		
 		
 	}
 
@@ -33,20 +45,30 @@ public class JobsCreateDTO {
 		this.name = name;
 	}
 
-	public String getStartDate() {
+	public LocalDateTime getStartDate() {
 		return StartDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		StartDate = startDate;
 	}
 
-	public String getEndDate() {
+	public LocalDateTime getEndDate() {
 		return EndDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		EndDate = endDate;
+	}
+
+
+	public Long getTemp() {
+		return temp;
+	}
+
+
+	public void setTemp(Long temp) {
+		this.temp = temp;
 	}
 	
 	

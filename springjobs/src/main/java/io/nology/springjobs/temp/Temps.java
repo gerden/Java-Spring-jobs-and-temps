@@ -1,12 +1,14 @@
 package io.nology.springjobs.temp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import io.nology.springjobs.job.Jobs;
 
@@ -24,13 +26,18 @@ public class Temps {
 	@Column
 	String lastName;
 
-	@Column
-	ArrayList<Jobs> jobs = new ArrayList<Jobs>();
+	@OneToMany(mappedBy = "Temp")	
+	List<Jobs> jobs;
+//	List<Jobs> jobs = new List<Jobs>();
+	
+//	@OneToMany
+	
+	
 	
 	public Temps() {
 	}
 	
-	public Temps(String firstName, String lastName, ArrayList<Jobs> jobs) {
+	public Temps(String firstName, String lastName, List<Jobs> jobs) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -39,11 +46,11 @@ public class Temps {
 
 	
 	
-	public ArrayList<Jobs> getJobs() {
+	public List<Jobs> getJobs() {
 		return jobs;
 	}
 
-	public void setJobs(ArrayList<Jobs> jobs) {
+	public void setJobs(List<Jobs> jobs) {
 		this.jobs = jobs;
 	}
 
