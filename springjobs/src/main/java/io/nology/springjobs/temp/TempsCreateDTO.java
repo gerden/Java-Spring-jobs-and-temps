@@ -1,16 +1,24 @@
 package io.nology.springjobs.temp;
 
 import java.util.ArrayList;
+import java.util.Set;
 
-import io.nology.springjobs.job.Jobs;
+import io.nology.springjobs.job.Job;
 
 public class TempsCreateDTO {
 	
 	String firstName;
 	String lastName;
-	ArrayList<Jobs> jobs = new ArrayList<Jobs>();
+	Set<Job> jobs;
 	
-	public TempsCreateDTO(String firstName, String lastName, ArrayList<Jobs> jobs){
+//	public TempsCreateDTO(String firstName, String lastName){
+//		super();
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		
+//	}
+	
+	public TempsCreateDTO(String firstName, String lastName, Set<Job> jobs){
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -33,11 +41,11 @@ public class TempsCreateDTO {
 		this.lastName = lastName;
 	}
 
-	public ArrayList<Jobs> getJobs() {
+	public Set<Job> getJobs() {
 		return jobs;
 	}
 
-	public void setJobs(ArrayList<Jobs> jobs) {
+	public void setJobs(Set<Job> jobs) {
 		this.jobs = jobs;
 	}
 

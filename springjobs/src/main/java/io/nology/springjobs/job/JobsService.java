@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
-import io.nology.springjobs.temp.Temps;
+import io.nology.springjobs.temp.Temp;
 import io.nology.springjobs.temp.TempsRepository;
 
 @Service
@@ -23,25 +23,25 @@ public class JobsService {
 	@Autowired
 	private TempsRepository tempRepository;
 	
-	public Jobs create(JobsCreateDTO data) {
+	public Job create(JobsCreateDTO data) {
 		String cleanName = data.getName().trim();
 		LocalDateTime cleanSDate = data.getStartDate();
 		LocalDateTime cleanEDate = data.getEndDate();
 		if(data.getTemp() == null) {
-			Jobs newJob = new Jobs(cleanName,cleanSDate,cleanEDate);	
+			Job newJob = new Job(cleanName,cleanSDate,cleanEDate);	
 			this.repository.save(newJob);		
 			return newJob;		
 		}
 		else {
 			Long cleanTemp = data.getTemp();
-			Optional<Temps> maybeTemp = this.tempRepository.findById(cleanTemp);
+			Optional<Temp> maybeTemp = this.tempRepository.findById(cleanTemp);
 			if(maybeTemp.isEmpty()) {
-				Jobs newJob = new Jobs(cleanName,cleanSDate,cleanEDate);
+				Job newJob = new Job(cleanName,cleanSDate,cleanEDate);
 				this.repository.save(newJob);
 				return newJob;
 			}
 			else {
-				Jobs newJob = new Jobs(cleanName,cleanSDate,cleanEDate,maybeTemp.get());
+				Job newJob = new Job(cleanName,cleanSDate,cleanEDate,maybeTemp.get());
 				this.repository.save(newJob);		
 				return newJob;
 			}		
@@ -53,16 +53,17 @@ public class JobsService {
 //		return newJob;
 	}
 	
-	public List<Jobs> all() {
+	public List<Job> all() {
+		long id = 0;
 		return this.repository.findAll();		
 	}	
 	
-	public Optional<Jobs> find(long id) {
+	public Optional<Job> find(long id) {
 		return this.repository.findById(id);		
 	}
 
-	public Jobs delete(long id) {
-		Optional<Jobs> maybeJob = this.find(id);
+	public Job delete(long id) {
+		Optional<Job> maybeJob = this.find(id);
 //		this.repository.delete(maybeJob);
 		
 		if (maybeJob.isEmpty()) {
@@ -72,15 +73,35 @@ public class JobsService {
 		return maybeJob.get(); 
 	}
 	
-	public Jobs changeName(long id) {
-		Optional<Jobs> maybeJob = this.find(id);
+	public Job changeName(long id) {
+		Optional<Job> maybeJob = this.find(id);
 //		this.repository.delete(maybeJob);
 		
 		if (maybeJob.isEmpty()) {
 			return null;
 		}
 //		this.repository.delete(maybeJob.get());
-		maybeJob.get().setName("test555555555555");;
+		maybeJob.get().setName("test11111111111");;
+//		realJob.setName("test2");
+		this.repository.save(maybeJob.get());
+		return maybeJob.get(); 
+	}
+	
+	public Job changeTemp(long id, long tempId) {
+		Optional<Job> maybeJob = this.find(id);
+		Optional<Temp> maybeTemp = tempRepository.findById(tempId);
+//		this.repository.delete(maybeJob);
+
+		if (maybeJob.isEmpty()) {
+			return null;
+		}
+		if (maybeTemp.isEmpty()) {
+			return null;
+		}
+//		this.repository.delete(maybeJob.get());
+		System.out.println(maybeTemp.get().getFirstName());
+//		System.out.println(tempRepository.getById(tempId));
+		maybeJob.get().setTemp(maybeTemp.get());;
 //		realJob.setName("test2");
 		this.repository.save(maybeJob.get());
 		return maybeJob.get(); 

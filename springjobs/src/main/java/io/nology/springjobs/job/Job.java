@@ -18,7 +18,7 @@ import io.nology.springjobs.temp.*;
 
 
 @Entity
-public class Jobs {
+public class Job {
 
 
 	@Id
@@ -36,45 +36,36 @@ public class Jobs {
 	LocalDateTime EndDate;
 
 //	@Column
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn( name = "temp_id", referencedColumnName = "id")
-	Temps Temp;
+//	@ManyToOne(cascade = CascadeType.ALL)
+////	@JoinColumn( name = "temp_id", referencedColumnName = "id")
+//	Temps Temp;
 
+	
+	@ManyToOne
+	@JoinColumn(name = "temp", nullable = true)
+	Temp temp;
 
 //	referencedColumnName = “id"
 
-	public Jobs() {
+	
+
+	public Job() {
 	}
 	
-	public Jobs(String name, LocalDateTime startDate, LocalDateTime endDate) {
+	public Job(String name, LocalDateTime startDate, LocalDateTime endDate) {
 		super();
 		this.name = name;
 		StartDate = startDate;
 		EndDate = endDate;
 	}
 	
-	public Jobs(String name, LocalDateTime startDate, LocalDateTime endDate, Temps temp) {
+	public Job(String name, LocalDateTime startDate, LocalDateTime endDate, Temp temp) {
 		super();
 		this.name = name;
 		StartDate = startDate;
 		EndDate = endDate;
-
-		System.out.println("test1");
 		
-		List<Jobs> jobs = temp.getJobs();
-		
-		System.out.println(jobs.get(19).getId());
-
-		System.out.println(StartDate.isBefore(jobs.get(0).getEndDate()));
-
-		System.out.println(jobs.size());
-		System.out.println("");
-		System.out.println(StartDate);
-		System.out.println(EndDate);
-		System.out.println("");
-		System.out.println(jobs.get(19).getStartDate());
-		System.out.println(jobs.get(19).getEndDate());
-		System.out.println("");
+		List<Job> jobs = new ArrayList(temp.getJobs());
 		
 		Boolean validTemp = true;
 		
@@ -84,23 +75,12 @@ public class Jobs {
 				System.out.println("not valid");
 				validTemp = false;
 				i = jobs.size();
-				
 			}
 		}
 
 		if (validTemp) {
-			Temp = temp;
-			System.out.println("valid");
-			
+			this.temp = temp;
 		}
-//		"endDate": "2015-03-29T19:30:40",
-//        "startDate": "2015-03-29T19:30:40"
-		
-		System.out.println("test2");
-		
-		
-		
-//		Temp = temp;
 	}
 	
 
@@ -143,6 +123,14 @@ public class Jobs {
 		EndDate = endDate;
 	}
 
-	
+//	public Temp getTemp() {
+//		return temp;
+//	}
+
+	public void setTemp(Temp temp) {
+		this.temp = temp;
+	}
+
+
 
 }

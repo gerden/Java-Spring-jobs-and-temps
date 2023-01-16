@@ -2,18 +2,21 @@ package io.nology.springjobs.temp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import io.nology.springjobs.job.Jobs;
+import io.nology.springjobs.job.Job;
 
 @Entity
-public class Temps {
+public class Temp {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,18 +29,22 @@ public class Temps {
 	@Column
 	String lastName;
 
-	@OneToMany(mappedBy = "Temp")	
-	List<Jobs> jobs;
+//	@OneToMany(mappedBy = "Temp")	
+//	List<Jobs> jobs;
 //	List<Jobs> jobs = new List<Jobs>();
 	
 //	@OneToMany
 	
 	
+	@OneToMany(mappedBy = "temp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Column(nullable = true)
+	Set<Job> jobs;
 	
-	public Temps() {
+	
+	public Temp() {
 	}
 	
-	public Temps(String firstName, String lastName, List<Jobs> jobs) {
+	public Temp(String firstName, String lastName, Set<Job> jobs) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -46,11 +53,11 @@ public class Temps {
 
 	
 	
-	public List<Jobs> getJobs() {
+	public Set<Job> getJobs() {
 		return jobs;
 	}
 
-	public void setJobs(List<Jobs> jobs) {
+	public void setJobs(Set<Job> jobs) {
 		this.jobs = jobs;
 	}
 

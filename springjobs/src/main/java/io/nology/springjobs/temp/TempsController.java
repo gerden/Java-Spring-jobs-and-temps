@@ -2,6 +2,7 @@ package io.nology.springjobs.temp;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.nology.springjobs.job.Jobs;
+import io.nology.springjobs.job.Job;
 
 
 
@@ -30,21 +31,40 @@ public class TempsController {
 	private TempsService service;
 	
 	@PostMapping
-	public ResponseEntity<Temps> create(@Valid @RequestBody TempsCreateDTO data){
-		Temps TempsCreated = this.service.create(data);
+	public ResponseEntity<Temp> create(@Valid @RequestBody TempsCreateDTO data){
+		Temp TempsCreated = this.service.create(data);
 		return new ResponseEntity<>(TempsCreated, HttpStatus.CREATED);
 	}
 	
 	
 	@GetMapping
-	public ResponseEntity<List<Temps>> all(){
-		List<Temps> allTemps = this.service.all();
+	public ResponseEntity<List<Temp>> all(){
+		List<Temp> allTemps = this.service.all();
 		return new ResponseEntity<>(allTemps, HttpStatus.OK);
 	}
 	
+//	@GetMapping(value = "/jobAvailable/{id}")
+//	public ResponseEntity<List<Temp>> jobAvailable(@PathVariable Long id){
+//		List<Temp> allTemps = this.service.all();
+////		Temp[] a = (Temp[]) allTemps.toArray();
+//		
+//		for(int i = 0; i < allTemps.size(); i++) {
+//
+//			System.out.println(allTemps.get(i).getFirstName());
+//			Set<Job> a = allTemps.get(i).getJobs();
+////			System.out.println(a.);
+//			System.out.println(i);
+//
+//		
+//		}
+//		
+//		
+//		return new ResponseEntity<>(allTemps, HttpStatus.OK);
+//	}
+	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Temps> find(@PathVariable Long id){
-		Optional<Temps> maybeTemp = this.service.find(id);
+	public ResponseEntity<Temp> find(@PathVariable Long id){
+		Optional<Temp> maybeTemp = this.service.find(id);
 		
 		if(maybeTemp.isEmpty()) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -55,7 +75,7 @@ public class TempsController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable long id){
-		Temps deletedTemp = this.service.delete(id);
+		Temp deletedTemp = this.service.delete(id);
 		if(deletedTemp == null) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
