@@ -43,24 +43,12 @@ public class TempsController {
 		return new ResponseEntity<>(allTemps, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value = "/jobAvailable/{id}")
-//	public ResponseEntity<List<Temp>> jobAvailable(@PathVariable Long id){
-//		List<Temp> allTemps = this.service.all();
-////		Temp[] a = (Temp[]) allTemps.toArray();
-//		
-//		for(int i = 0; i < allTemps.size(); i++) {
-//
-//			System.out.println(allTemps.get(i).getFirstName());
-//			Set<Job> a = allTemps.get(i).getJobs();
-////			System.out.println(a.);
-//			System.out.println(i);
-//
-//		
-//		}
-//		
-//		
-//		return new ResponseEntity<>(allTemps, HttpStatus.OK);
-//	}
+	@GetMapping(value = "/jobAvailable/{id}")
+	public ResponseEntity<List<Temp>> jobAvailable(@PathVariable Long id){
+		List<Temp> allTemps = this.service.availableTempsForJob(id);		
+		
+		return new ResponseEntity<>(allTemps, HttpStatus.OK);
+	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Temp> find(@PathVariable Long id){

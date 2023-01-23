@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.nology.springjobs.temp.Temp;
 import io.nology.springjobs.temp.TempsCreateDTO;
+import io.nology.springjobs.temp.TempsService;
 
 
 @RestController
 @RequestMapping("/jobs")
 public class JobsController {
-	
+
 	@Autowired
 	private JobsService service;
+	@Autowired
+	private TempsService tempService;
 
 	@GetMapping
 	public ResponseEntity<List<Job>> all(){
@@ -33,13 +37,14 @@ public class JobsController {
 		
 
 //		System.out.println(allJobs.get(0).name);
-//		System.out.println(allJobs.get(0).temp.getFirstName());
+//		System.out.println(allJobs.get(1).temp.getFirstName());
 		
 		return new ResponseEntity<>(allJobs, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Job> find(@PathVariable Long id){
+//		System.out.println("test");
 		Optional<Job> maybeJob = this.service.find(id);
 		
 		if(maybeJob.isEmpty()) {
@@ -49,29 +54,13 @@ public class JobsController {
 		return new ResponseEntity<>(maybeJob.get(), HttpStatus.OK);
 	}
 
-//	@GetMapping(value = "/assigned/{id}/{assigned}")
-//	public ResponseEntity<List<Job>> assignedFilter(@PathVariable Long id, @PathVariable Boolean assigned){
-//		List<Job> allJobs = this.service.all();
-//		
-//		for(int i = 0; i < allJobs.size(); i++) {
-//			if(allJobs.get(i)) {
-//				
-//			}
-//			
-//		}
-//		
-//		return new ResponseEntity<>(allJobs, HttpStatus.OK);
-//	}
 	
-	@GetMapping(value = "/assigned/{id}/{assigned}")
-	public ResponseEntity<Job> assigned(@PathVariable Long id, @PathVariable Boolean assigned){
-		Optional<Job> maybeJob = this.service.find(id);
+	@GetMapping(value = "/assignedTemp/{id}/{assigned}")
+	public ResponseEntity<List<Job>> assigned(@PathVariable Long id, @PathVariable Boolean assigned){
 		
-		if(maybeJob.isEmpty()) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		List<Job> allValidJobs = this.service.tempAssigned(id, assigned);
 		
-		return new ResponseEntity<>(maybeJob.get(), HttpStatus.OK);
+		return new ResponseEntity<>(allValidJobs, HttpStatus.OK);
 	}
 	
 	@PostMapping
@@ -82,7 +71,11 @@ public class JobsController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable long id){
+		
+//		this.service.changeTemp(service.find(id).get().getId(), service.find(id).get().getTemp().getId());
+		
 		Job deletedJob = this.service.delete(id);
+
 		if(deletedJob == null) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -101,9 +94,19 @@ public class JobsController {
 	}
 	
 	
-	@PatchMapping("/temp/{id}/{temp}")
-	public ResponseEntity<?> changeTemp(@PathVariable long id, @PathVariable long temp){
-		Job changedJob = this.service.changeTemp(id, temp);
+	@PatchMapping("/changeTemp/{jobId}/{tempId}")
+	public ResponseEntity<?> changeTemp(@PathVariable long jobId, @PathVariable long tempId){
+		Job changedJob = this.service.changeTemp(jobId, tempId);
+		if(changedJob == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(changedJob, HttpStatus.OK);
+		
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> updateJob(@PathVariable long id, @Valid @RequestBody JobsCreateDTO data){
+		Job changedJob = this.service.updateJob(id, data);
 		if(changedJob == null) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
